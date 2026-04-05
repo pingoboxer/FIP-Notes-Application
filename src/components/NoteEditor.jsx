@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from 'react';
 
 export default function NoteEditor({ note, onSave, onCancel }) {
-  const [title, setTitle] = useState(note?.title || '');
-  const [content, setContent] = useState(note?.content || '');
+  const [title, setTitle]       = useState(note?.title   || '');
+  const [content, setContent]   = useState(note?.content || '');
   const [tagInput, setTagInput] = useState('');
-  const [tags, setTags] = useState(note?.tags || []);
+  const [tags, setTags]         = useState(note?.tags    || []);
 
   useEffect(() => {
     setTitle(note?.title || '');
@@ -16,99 +15,106 @@ export default function NoteEditor({ note, onSave, onCancel }) {
   function addTag(e) {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
-      const trimmed = tagInput.trim().toLowerCase().replace(/\s+/g, '-');
-      if (trimmed && !tags.includes(trimmed)) {
-        setTags([...tags, trimmed]);
-      }
+      const t = tagInput.trim().toLowerCase().replace(/\s+/g, '-');
+      if (t && !tags.includes(t)) setTags([...tags, t]);
       setTagInput('');
     }
   }
 
-  function removeTag(tag) {
-    setTags(tags.filter(t => t !== tag));
-  }
-
-  function handleSave() {
-    onSave({ title, content, tags });
-  }
+  const field = {
+    width: '100%',
+    background: 'rgba(255,255,255,0.07)',
+    border: '1px solid rgba(255,255,255,0.12)',
+    borderRadius: '12px',
+    color: '#fff',
+    padding: '11px 15px',
+    fontSize: '14px',
+    fontFamily: 'inherit',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+  };
 
   return (
-    <div className="fixed inset-0 bg-ink-900/60 backdrop-blur-sm z-50 
-                    flex items-center justify-center p-4">
-      <div className="bg-cream-50 border-2 border-ink-900 shadow-[6px_6px_0px_#1a1209]
-                      w-full max-w-lg">
-        {/* Editor Header */}
-        <div className="border-b-2 border-ink-900 px-5 py-3 flex items-center justify-between">
-          <span className="font-mono text-xs text-ink-500 uppercase tracking-widest">
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 50,
+      background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+    }}>
+      <div style={{
+        background: 'linear-gradient(160deg, #1a1030, #0f1f2e)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        borderRadius: '24px', width: '100%', maxWidth: '500px',
+        overflow: 'hidden', boxShadow: '0 40px 80px rgba(0,0,0,0.6)',
+      }}>
+        {/* Header */}
+        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '16px 22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
             {note?.id ? 'Edit Note' : 'New Note'}
           </span>
-          <button onClick={onCancel}
-            className="text-ink-400 hover:text-ink-900 transition-colors text-xl leading-none">
-            ×
-          </button>
+          <button onClick={onCancel} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '24px', cursor: 'pointer', lineHeight: 1, padding: 0 }}>×</button>
         </div>
 
         {/* Fields */}
-        <div className="p-5 space-y-4">
+        <div style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <input
-            type="text"
-            placeholder="Note title..."
-            value={title}
+            type="text" placeholder="Note title..." value={title}
             onChange={e => setTitle(e.target.value)}
-            className="w-full bg-transparent border-b-2 border-ink-200 focus:border-ink-900
-                       font-display text-xl text-ink-900 pb-2 outline-none
-                       placeholder:text-ink-200 transition-colors"
+            style={{ ...field, fontSize: '20px', fontWeight: 700 }}
+            onFocus={e => e.target.style.borderColor = 'rgba(167,139,250,0.6)'}
+            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
           />
-
           <textarea
-            placeholder="Write your note here..."
-            value={content}
-            onChange={e => setContent(e.target.value)}
-            rows={6}
-            className="w-full bg-cream-100 border border-ink-200 focus:border-ink-900
-                       p-3 text-sm text-ink-700 outline-none resize-none
-                       font-body leading-relaxed placeholder:text-ink-300 transition-colors"
+            placeholder="Write your note here..." value={content}
+            onChange={e => setContent(e.target.value)} rows={6}
+            style={{ ...field, resize: 'none', lineHeight: 1.7 }}
+            onFocus={e => e.target.style.borderColor = 'rgba(167,139,250,0.6)'}
+            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
           />
 
-          {/* Tag input */}
+          {/* Tags */}
           <div>
-            <div className="flex flex-wrap gap-1 mb-2">
-              {tags.map(tag => (
-                <span key={tag}
-                  className="inline-flex items-center gap-1 text-xs font-mono
-                             px-2 py-0.5 border border-ink-300 bg-cream-100 text-ink-600">
-                  #{tag}
-                  <button onClick={() => removeTag(tag)}
-                    className="text-ink-400 hover:text-red-500 transition-colors">
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
+            {tags.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
+                {tags.map(tag => (
+                  <span key={tag} style={{
+                    background: 'rgba(124,58,237,0.3)', color: '#c4b5fd',
+                    fontSize: '12px', fontWeight: 600, padding: '4px 11px',
+                    borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px',
+                  }}>
+                    #{tag}
+                    <button
+                      onClick={() => setTags(tags.filter(t => t !== tag))}
+                      style={{ background: 'none', border: 'none', color: '#c4b5fd', cursor: 'pointer', fontSize: '15px', lineHeight: 1, padding: 0 }}
+                    >×</button>
+                  </span>
+                ))}
+              </div>
+            )}
             <input
-              type="text"
-              placeholder="Add tag, press Enter..."
-              value={tagInput}
-              onChange={e => setTagInput(e.target.value)}
-              onKeyDown={addTag}
-              className="w-full bg-transparent border-b border-ink-200 focus:border-ink-700
-                         text-sm text-ink-700 pb-1 outline-none font-mono
-                         placeholder:text-ink-300 transition-colors"
+              type="text" placeholder="Add a tag, press Enter..." value={tagInput}
+              onChange={e => setTagInput(e.target.value)} onKeyDown={addTag}
+              style={{ ...field, fontSize: '13px' }}
+              onFocus={e => e.target.style.borderColor = 'rgba(167,139,250,0.6)'}
+              onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
             />
           </div>
         </div>
 
-        {/* Footer actions */}
-        <div className="border-t-2 border-ink-900 px-5 py-3 flex justify-end gap-2">
-          <button onClick={onCancel}
-            className="px-4 py-2 text-sm border border-ink-300 text-ink-500
-                       hover:border-ink-700 hover:text-ink-900 transition-colors">
+        {/* Footer */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '16px 22px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+          <button onClick={onCancel} style={{
+            padding: '10px 20px', borderRadius: '50px', fontSize: '13px', fontWeight: 600,
+            border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)',
+            color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontFamily: 'inherit',
+          }}>
             Cancel
           </button>
-          <button onClick={handleSave}
-            className="px-4 py-2 text-sm bg-ink-900 text-cream-50 border-2 border-ink-900
-                       shadow-[2px_2px_0px_#6b5b42] hover:shadow-none
-                       hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+          <button onClick={() => onSave({ title, content, tags })} style={{
+            padding: '10px 24px', borderRadius: '50px', fontSize: '13px', fontWeight: 600,
+            background: 'linear-gradient(135deg, #7c3aed, #2563eb)', color: '#fff',
+            border: 'none', cursor: 'pointer', fontFamily: 'inherit',
+            boxShadow: '0 4px 15px rgba(124,58,237,0.4)',
+          }}>
             Save Note
           </button>
         </div>

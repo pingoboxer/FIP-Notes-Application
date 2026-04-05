@@ -95,4 +95,23 @@ export default function App() {
       )}
     </div>
   );
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0f0f1a 0%, #1a0f2e 50%, #0a1628 100%)' }}>
+      <Header onCreateNote={handleCreateNote} noteCount={notes.length} />
+      <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
+        <TagFilter
+          allTags={allTags}
+          selectedTags={selectedTags}
+          onToggleTag={handleToggleTag}
+          onClearFilter={() => setSelectedTags([])}
+        />
+        <NotesList notes={filteredNotes} onEdit={handleEditNote} onDelete={handleDeleteNote} />
+      </main>
+      {isEditorOpen && (
+        <NoteEditor note={editingNote} onSave={handleSaveNote}
+          onCancel={() => { setIsEditorOpen(false); setEditingNote(null); }} />
+      )}
+    </div>
+  );
 }

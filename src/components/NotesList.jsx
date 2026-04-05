@@ -1,27 +1,32 @@
-
 import NoteCard from './NoteCard';
 
 export default function NotesList({ notes, onEdit, onDelete }) {
   if (notes.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 text-center">
-        <p className="font-display text-4xl text-ink-200 italic mb-3">No notes yet.</p>
-        <p className="text-sm text-ink-300 font-body">
-          Click <strong>+ New Note</strong> to get started.
+      <div style={{ textAlign: 'center', padding: '100px 0' }}>
+        <p style={{
+          fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: '40px',
+          background: 'linear-gradient(135deg, #a78bfa, #38bdf8)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+        }}>
+          No notes yet.
+        </p>
+        <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '14px', marginTop: '12px' }}>
+          Click <strong style={{ color: 'rgba(255,255,255,0.5)' }}>New Note</strong> to get started.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6">
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+      gap: '16px',
+      paddingBottom: '60px',
+    }}>
       {notes.map(note => (
-        <NoteCard
-          key={note.id}
-          note={note}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
+        <NoteCard key={note.id} note={note} onEdit={onEdit} onDelete={onDelete} />
       ))}
     </div>
   );
