@@ -13,27 +13,26 @@ A lightweight note-taking web app built with React, Vite, and Tailwind CSS.
 - Tailwind CSS v4
 
 ## Setup
-npm install
-npm run dev
+- npm install
+- npm run dev
 
-📌 Additional Project Documentation
-🌿 Branch Strategy
+## Additional Project Documentation and Branch Strategy
 
 This project followed a feature-based branching strategy to ensure clean development and easy integration.
 
-main → Stable and production-ready code
-feature-header → Implemented the application header UI and layout
-feature-notes-v1 → Core notes functionality (create, edit, delete notes)
+- main → Stable and production-ready code
+- feature-header → Implemented the application header UI and layout
+- feature-notes-v1 → Core notes functionality (create, edit, delete notes)
 
 Each feature was developed in its own branch and merged into main after completion and review.
 
-📸 Screenshots of Merged PRs
+## Screenshots of Merged PRs
 
 ![Merged PR - Header Feature](./screenshot/Pull%20Requests.png)
 ![Merged PR - Notes Feature](./screenshot/Pull%20Requests.png)
 
 
-💻 Git Commands Frequently Used
+## Git Commands Frequently Used
 
 ```
 # Create a new feature branch
@@ -62,7 +61,7 @@ git merge feature-header
 git branch -d feature-header
 ```
 
-📚 Lessons Learned
+## Lessons Learned
 
 - Structured Branching Improves Workflow
 Using separate feature branches (feature-header, feature-notes-v1) made development more organized and easier to manage.
